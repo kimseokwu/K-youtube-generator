@@ -1,10 +1,10 @@
 import torch
-import torch.nn as nn
 from torch.functional import F 
 
-device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
-def generate_title(model, tokenizer, text, max_length=30, temperature=0.7):
+def generate_title(model, tokenizer, text: str, max_length=30, temperature=0.7) -> str:
+    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+
     model.eval()
     count = 0
     sent = text[:]
