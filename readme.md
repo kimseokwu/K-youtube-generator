@@ -23,6 +23,10 @@ KoGPT2 모델에 K-유튜브, 속된 말로 '국뽕 유튜브'의 제목을 학�
 
 ![데이터 샘플](https://github.com/kimseokwu/K-youtube-generator/blob/main/image/data_example.png?raw=true)
 
+# Output
+
+![](https://github.com/kimseokwu/K-youtube-generator/blob/main/image/output_example.png?raw=true)
+
 # Reference
 
 - [KoGPT2 (한국어 GPT-2) Ver 2.0](https://github.com/SKT-AI/KoGPT2)
