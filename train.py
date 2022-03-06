@@ -1,35 +1,15 @@
 from tqdm import tqdm
 
-import pandas as pd
 import torch
-from transformers import GPT2LMHeadModel, PreTrainedTokenizerFast
+from torch.utils.data import DataLoader
 
-from utils.dataloader import *
+from utils.datasets import *
 
-DATASET_PATH = 'dataset/k_youtube_data.csv'
-MODEL_PATH = 'skt/kogpt2-base-v2'
-device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-
-df = pd.read_csv(DATASET_PATH)
-model = GPT2LMHeadModel.from_pretrained(MODEL_PATH)
-tokenizer = PreTrainedTokenizerFast.from_pretrained(MODEL_PATH)
-
-# train dataset 만들기
-docs = df['vid_name']
-
-# padding할 max_length 구하기
-max_length = 0
-
-for doc in docs:
-    text = '<s>' + doc + '</s>'
-    encoded = tokenizer.encode(text)
-    max_length = max(max_length, len(encoded))
-
-# make dataset
-dataset = TitleDataset(docs, tokenizer, max_length)
 
 # train_model
 def train_model(model, dataset, batch_size=32, epochs=4, learning_rate=3e-5):
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=0)
     model = model.to(device)
     model.train()
@@ -46,9 +26,7 @@ def train_model(model, dataset, batch_size=32, epochs=4, learning_rate=3e-5):
             loss.backward()
             optimizer.step()
     
-    model.save_pretrained('model_file/model.bin')
+        print(f'EPOCH: {epoch}, loss: {loss.item()}')
+        model.save_pretrained(f'model_file/model_{epoch}')
     
     return model
-
-if __name__ == '__main__':
-    train_model(model, dataset)
